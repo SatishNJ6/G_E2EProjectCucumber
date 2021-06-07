@@ -2,7 +2,6 @@ package resources;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -16,47 +15,41 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class base {
 
-	  public WebDriver driver;
+	public WebDriver driver;
 	public Properties prop;
-public WebDriver initializeDriver() throws IOException
-{
-	
- prop= new Properties();
-FileInputStream fis=new FileInputStream("C:\\Users\\rahul\\E2EProject\\src\\main\\java\\resources\\data.properties");
 
-prop.load(fis);
-String browserName=prop.getProperty("browser");
-System.out.println(browserName);
+	public WebDriver initializeDriver() throws IOException {
 
-if(browserName.equals("chrome"))
-{
-	 System.setProperty("webdriver.chrome.driver", "C://chromedriver.exe");
-	driver= new ChromeDriver();
-		//execute in chrome driver
-	
-}
-else if (browserName.equals("firefox"))
-{
-	 driver= new FirefoxDriver();
-	//firefox code
-}
-else if (browserName.equals("IE"))
-{
+		prop = new Properties();
+		FileInputStream fis = new FileInputStream(
+				System.getProperty("user.dir") + "\\src\\main\\java\\resources\\data.properties");
+
+		prop.load(fis);
+		String browserName = prop.getProperty("browser");
+		System.out.println(browserName);
+
+		if (browserName.equals("chrome")) {
+			System.setProperty("webdriver.chrome.driver",
+					System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
+			driver = new ChromeDriver();
+			// execute in chrome driver
+
+		} else if (browserName.equals("firefox")) {
+			driver = new FirefoxDriver();
+			// firefox code
+		} else if (browserName.equals("IE")) {
 //	IE code
-}
+		}
 
-driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-return driver;
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		return driver;
 
+	}
 
-}
+	public void getScreenshot(String result) throws IOException {
+		File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(src, new File("C://test//" + result + "screenshot.png"));
 
-public void getScreenshot(String result) throws IOException
-{
-	File src=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-	FileUtils.copyFile(src, new File("C://test//"+result+"screenshot.png"));
-	
-}
-
+	}
 
 }
